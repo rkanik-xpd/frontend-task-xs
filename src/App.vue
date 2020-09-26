@@ -1,32 +1,64 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+	<v-app>
+		<v-app-bar app flat class="ma-3 elevation-2 rounded">
+			<div class="d-flex align-center">
+				<v-img
+					alt="Vuetify Name"
+					class="shrink"
+					contain
+					src="https://xpeedstudio.com/wp-content/uploads/2019/06/xpeedstudio_logo_header.png"
+					height="48"
+					width="128"
+				/>
+			</div>
+
+			<v-spacer></v-spacer>
+
+			<v-btn @click="handleChangeTheme" icon>
+				<v-icon v-if="$vuetify.theme.dark">mdi-white-balance-sunny</v-icon>
+				<v-icon v-else>mdi-weather-night</v-icon>
+			</v-btn>
+		</v-app-bar>
+
+		<v-main>
+			<perfect-scrollbar class="main-scrollbar">
+				<v-container>
+					<router-view></router-view>
+				</v-container>
+			</perfect-scrollbar>
+		</v-main>
+	</v-app>
 </template>
 
+<script>
+export default {
+	name: 'App',
+	components: {},
+	data: () => ({
+		THEME_KEY: 'ft-xs-dark-theme'
+	}),
+	created() {
+		this.syncTheme()
+	},
+	methods: {
+		syncTheme() {
+			let theme = localStorage.getItem(this.THEME_KEY)
+			this.changeTheme((theme && theme === 'true') ? true : false)
+		},
+		handleChangeTheme() {
+			this.changeTheme(!this.$vuetify.theme.dark)
+		},
+		changeTheme(theme) {
+			console.log('changeTheme');
+			this.$vuetify.theme.dark = theme
+			localStorage.setItem(this.THEME_KEY, theme)
+		}
+	}
+};
+</script>
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+	.main-scrollbar {
+		height: calc(100vh - 76px);
+		padding: 2rem;
+	}
 </style>
