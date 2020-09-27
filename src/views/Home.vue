@@ -23,61 +23,51 @@
 			</v-card-title>
 			<v-divider></v-divider>
 			<v-card-text class="px-8">
-				<v-data-table
+				<UsersTable
 					:headers="headers"
 					:items="users"
 					:search="filterKey"
 					:loading="tableLoading"
+					:columnKeys="headerKeys"
+					@reorder="handleReorder"
 					class="user-list__table"
-				>
-					<template v-slot:body="props">
-						<draggable
-							:list="props.items"
-							tag="tbody"
-							v-bind="dragOptions"
-						>
-							<tr v-for="user in props.items" :key="user.id">
-								<td>
-									<v-icon class="drag-icon">mdi-drag</v-icon>
-								</td>
-								<td
-									v-for="(key, keyIndex) of headerKeys"
-									:key="keyIndex"
-								>
-									{{
-										key === "created_at"
-											? date(headerKeys[key])
-											: user[key]
-									}}
-								</td>
-								<td>
-									<v-btn :to="`/update/${user.id}`" icon small>
-										<v-icon small>mdi-pencil</v-icon>
-									</v-btn>
-								</td>
-							</tr>
-						</draggable>
-					</template>
-				</v-data-table>
+				/>
 			</v-card-text>
 		</v-card>
 	</div>
 </template>
 
 <script>
-import api from '../api/api'
 import moment from 'moment'
+import api from '../api/api'
+import { sleep } from '@/helpers/helpers'
+import UsersTable from '@/components/UsersTable'
 export default {
 	name: 'Home',
+	components: {
+		UsersTable
+	},
 	data: () => ({
 		filterKey: '',
-		headers: [],
+		headers: [
+			{
+				text: 'Reorder',
+				value: 'reorder',
+				sortable: false
+			},
+			{
+				text: 'Edit',
+				value: 'edit',
+				sortable: false
+			}
+		],
 		users: [],
 		headerKeys: [],
 		tableLoading: false
 	}),
 	created() {
 		this.getList()
+
 	},
 	computed: {
 		dragOptions() {
@@ -87,22 +77,44 @@ export default {
 		}
 	},
 	methods: {
-		date(date) {
-			return moment(date).calendar()
+
+		date: date => moment(date).calendar(),
+
+		async notify(msgs, type = 'success') {
+			for (let msg of msgs) {
+				this.$notify({
+					type,
+					title: msg,
+					group: 'toast',
+					//duration: 1000000
+				});
+				await sleep(300)
+			}
 		},
+
+		async handleReorder(users) {
+			this.users = users
+			let { status, messages } = await api.reorder(users)
+
+			// Show notifications
+			this.notify(messages, status)
+
+		},
+
 		async getList() {
 
-			let { error, list, headers, message } = await api.getList()
-			console.log(error, list, headers, message);
+			let { status, messages, data } = await api.getList()
 
-			if (error) {
-				console.log(error, message);
-				return error
+			if (status === 'error') return this.notify(messages, 'error')
 
-			}
+			// Show notifications
+			let oStatus = { success: 'success', false: 'warning', }
+			this.notify(messages, oStatus[status])
 
 			// Save userlist to data
-			this.users = list
+			this.users = data.rows
+
+			let headers = data.headers[0]
 
 			// Remove hidden fields
 			headers = Object
@@ -112,9 +124,9 @@ export default {
 			// Modify headers for vuetify data table
 			headers = Object.entries(headers).map(([key, value]) => {
 				return {
+					value: key,
 					text: value.title,
 					sortable: value.sortable,
-					value: key,
 					filterable: value.searchable
 				}
 			})
@@ -123,19 +135,7 @@ export default {
 			this.headerKeys = headers.map(h => h.value)
 
 			// Concat headers between two additional column
-			this.headers = [
-				{
-					text: 'Reorder',
-					value: 'reorder',
-					sortable: false
-				},
-				...headers,
-				{
-					text: 'Edit',
-					value: 'edit',
-					sortable: false
-				},
-			]
+			this.headers.splice(1, 0, ...headers)
 
 		}
 	}
@@ -146,17 +146,6 @@ export default {
 	.user-list {
 		&__searchfield {
 			max-width: 300px !important;
-		}
-		&__table {
-			thead tr {
-				th:first-child,
-				th:last-child {
-					max-width: 48px;
-				}
-			}
-			.drag-icon {
-				cursor: grab;
-			}
 		}
 		.v-text-field > .v-input__control {
 			& > .v-input__slot {

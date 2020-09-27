@@ -2,14 +2,16 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import vuetify from './plugins/vuetify';
-import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import draggable from 'vuedraggable'
+import vuetify from './plugins/vuetify';
+import Notifications from 'vue-notification'
+import PerfectScrollbar from 'vue2-perfect-scrollbar'
 
 // Styles
 import './assets/scss/index.scss'
 import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
 
+Vue.use(Notifications)
 Vue.use(PerfectScrollbar)
 Vue.component('draggable', draggable)
 

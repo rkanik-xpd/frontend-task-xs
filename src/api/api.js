@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost/vue/simple-crud/api/'
+    // baseURL: 'http://localhost/vue/simple-crud/api/'
+    baseURL: 'http://localhost/vue/frontend-task-xs/api/'
 })
 
 const endpoints = {
@@ -14,7 +15,23 @@ const endpoints = {
     },
 }
 
+const handle = async callback => {
+    try { return (await callback).data }
+    catch (e) {
+        return e.response ? e.response : {
+            status: 'error',
+            messages: [e.message]
+        }
+    }
+}
+
 export default {
+
+    getList: async () => {
+        try { return (await api.get(endpoints.list)).data }
+        catch (error) { return error.response }
+    },
+    reorder: async data => await handle(api.post(endpoints.reorder, data)),
 
     createUser: data => new Promise(resolve => {
         api.post(endpoints.submit, data)
@@ -23,25 +40,6 @@ export default {
                     resolve({
                         messages: data.messages,
                         data: data.data
-                    })
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                resolve({
-                    error: true,
-                    message: err.message,
-                    data: err.response
-                })
-            })
-    }),
-    getList: () => new Promise(resolve => {
-        api.get(endpoints.list)
-            .then(({ data }) => {
-                if (data.status !== 'error') {
-                    resolve({
-                        list: data.data.rows,
-                        headers: data.data.headers[0]
                     })
                 }
             })

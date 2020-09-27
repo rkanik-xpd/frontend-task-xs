@@ -1,0 +1,7 @@
+GET http://localhost/vue/frontend-task-xs/api/list.php HTTP/1.1
+
+###
+POST http://localhost/vue/frontend-task-xs/api/reorder.php HTTP/1.1
+content-type: application/json
+
+{ }
