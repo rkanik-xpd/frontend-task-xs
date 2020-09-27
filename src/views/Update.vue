@@ -1,8 +1,9 @@
 <template>
-  <div class="create">
+  <div class="update">
     <UserForm
+      update
       :fields="formfields"
-      @create="handleCreateUser"
+      @update="handleUpdateUser"
       @add-repeater="handleAddRepeater"
       @del-repeater="handleDelRepeater"
     />
@@ -10,9 +11,9 @@
 </template>
 
 <script>
-import CreateMixin from "@/mixins/UserCreateUpdate";
+import UpdateMixin from "@/mixins/UserCreateUpdate";
 export default {
-  name: "Create",
-  mixins: [CreateMixin],
+  name: "Update",
+  mixins: [UpdateMixin],
 };
 </script>

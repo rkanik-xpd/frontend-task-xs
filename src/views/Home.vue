@@ -51,7 +51,7 @@
 									}}
 								</td>
 								<td>
-									<v-btn icon small>
+									<v-btn :to="`/update/${user.id}`" icon small>
 										<v-icon small>mdi-pencil</v-icon>
 									</v-btn>
 								</td>

@@ -7,8 +7,8 @@ header('Access-Control-Allow-Headers: X-Requested-With');
 
 $file_suffix = (isset($_GET['id']) ? '-with-value' : '');
 
-// $filename = 'form/' . rand(2, 5) . $file_suffix . '.json';
-$filename = 'form/' . 5 . $file_suffix . '.json';
+$filename = 'form/' . rand(2, 5) . $file_suffix . '.json';
+//$filename = 'form/' . 5 . $file_suffix . '.json';
 
 echo file_get_contents($filename);
 

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost/vue/frontend-task-xs/api/'
+    baseURL: 'http://localhost/vue/simple-crud/api/'
 })
 
 const endpoints = {
@@ -15,6 +15,26 @@ const endpoints = {
 }
 
 export default {
+
+    createUser: data => new Promise(resolve => {
+        api.post(endpoints.submit, data)
+            .then(({ data }) => {
+                if (data.status !== 'error') {
+                    resolve({
+                        messages: data.messages,
+                        data: data.data
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                resolve({
+                    error: true,
+                    message: err.message,
+                    data: err.response
+                })
+            })
+    }),
     getList: () => new Promise(resolve => {
         api.get(endpoints.list)
             .then(({ data }) => {
@@ -34,8 +54,8 @@ export default {
                 })
             })
     }),
-    getForm: () => new Promise(resolve => {
-        api.get(endpoints.form())
+    getForm: (id) => new Promise(resolve => {
+        api.get(endpoints.form(id))
             .then(({ data }) => {
                 console.log('getForm', data);
                 if (data.status !== 'error') {
