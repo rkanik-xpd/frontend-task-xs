@@ -85,8 +85,7 @@ export default {
 				this.$notify({
 					type,
 					title: msg,
-					group: 'toast',
-					//duration: 1000000
+					group: 'toast'
 				});
 				await sleep(300)
 			}

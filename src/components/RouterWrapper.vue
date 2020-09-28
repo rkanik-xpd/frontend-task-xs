@@ -10,6 +10,7 @@
 
 <style>
 .route-scrollbar {
+  padding-bottom: 2rem;
   height: calc(100vh - 76px);
 }
 

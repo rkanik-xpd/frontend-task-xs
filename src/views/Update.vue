@@ -3,6 +3,7 @@
     <UserForm
       update
       :fields="formfields"
+      :updateUser='handleUpdateUser'
       @update="handleUpdateUser"
       @add-repeater="handleAddRepeater"
       @del-repeater="handleDelRepeater"

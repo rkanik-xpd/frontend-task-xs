@@ -129,9 +129,10 @@
           </template>
 
           <v-btn
-            :disabled="!valid"
-            color="success"
             class="mr-4"
+            color="success"
+            :loading='loading'
+            :disabled="!valid || loading"
             @click="handleValidate"
           >
             {{ update ? "Update" : "Create" }}
@@ -149,6 +150,8 @@
 export default {
   name: "UserForm",
   props: {
+    createUser: Function,
+    updateUser: Function,
     update: {
       type: Boolean,
       default: false,
@@ -157,19 +160,21 @@ export default {
   },
   data: () => ({
     valid: true,
+    loading: false
   }),
   created() {},
   computed: {
-    rRequired: () => (v) => !!v || "Field is required!",
-    rEmail: () => (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    rOnlyLetters: () => (v) =>
-      /^[a-z\s]+$/i.test(v) || "This field only accept characters",
-    rOnlyLetterNumber: () => (v) =>
-      /^[a-z0-9\s]+$/i.test(v) ||
-      "This field only accept characters and numbers",
+    rRequired: () => v => !!v || "Field is required!",
+    rEmail: () => v => /.+@.+\..+/.test(v) || "E-mail must be valid",
+    rOnlyLetters: () => v => /^[a-z\s]+$/i.test(v) || "This field only accept characters",
+    rOnlyLetterNumber: () => v => /^[a-z0-9\s]+$/i.test(v) || "This field only accept characters and numbers",
     maxRegex: () => /max:[0-9]+/,
+    handleSubmit(){ return this.update ? this.updateUser : this.createUser }
   },
   methods: {
+    getFieldsAsObject(){
+      return this.fields.reduce( (data, field) => ({ ...data, [field.key]: field.value }), {})
+    },
     getMax(str) {
       let match = str.match(this.maxRegex);
       if (!match) return;
@@ -255,19 +260,17 @@ export default {
       return ["text", "email", "number"].includes(type);
     },
     handleValidate() {
+      this.loading = true
       let valid = this.$refs.form.validate();
-      console.log("valid", valid);
       if (valid) {
-        this.$emit(
-          this.update ? "update" : "create",
-          this.fields.reduce(
-            (data, field) => ({
-              ...data,
-              [field.key]: field.value,
-            }),
-            {}
-          )
-        );
+        let data = this.getFieldsAsObject()
+        this.handleSubmit(data).then( success => {
+          (success && !this.update) && this.handleReset()
+          this.loading = false
+        })
+      }
+      else{
+        this.loading = false
       }
     },
     handleReset() {

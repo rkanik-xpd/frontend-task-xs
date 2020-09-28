@@ -1,5 +1,6 @@
 <script>
 import api from "@/api/api";
+import { sleep } from '@/helpers/helpers'
 import UserForm from "@/components/UserForm";
 export default {
   name: "UserCreateUpdate",
@@ -13,6 +14,16 @@ export default {
     this.getForm(this.$route.params.id);
   },
   methods: {
+    async notify(msgs, type = 'success') {
+			for (let msg of msgs) {
+				this.$notify({
+					type,
+					title: msg,
+					group: 'toast'
+				});
+				await sleep(300)
+			}
+		},
     handleDelRepeater([filed, valueIndex]) {
       this.formfields[filed].value.splice(valueIndex, 1);
     },
@@ -24,12 +35,14 @@ export default {
       );
     },
     async getForm(id) {
-      let { error, form, message } = await api.getForm(id);
-      if (error) {
-        return console.log("ERROR:", message);
-      }
+      let { status, messages, data } = await api.getForm(id);
 
-      console.log(form);
+      if (status === 'error') return this.notify(messages, status)
+
+			// Show notifications
+      this.notify(messages, status)
+  
+      let form = data.fields[0]
 
       this.formfields = Object.entries(form).map(([key, value]) => ({
         key,
@@ -45,14 +58,22 @@ export default {
       });
     },
     async handleCreateUser(user) {
-      console.log("handleCreateUser", user);
-      let res = await api.createUser(user);
-      console.log(res);
+      // Submit form and get response
+      let { status, messages } = await api.createUser(user);
+      await sleep(1000)
+      if (status === 'error') return this.notify(messages, status)
+      // Show notifications
+      this.notify(messages, status)
+      return status === 'success'
     },
     async handleUpdateUser(user) {
-      console.log("handleUpdateUser", user);
-      let res = await api.createUser(user);
-      console.log(res);
+      // Submit form and get response
+      let { status, messages } = await api.updateUser(user);
+      await sleep(1000)
+      if (status === 'error') return this.notify(messages, status)
+      // Show notifications
+      this.notify(messages, status)
+      return status === 'success'
     },
   },
 };

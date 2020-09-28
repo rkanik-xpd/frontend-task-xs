@@ -2,6 +2,7 @@
   <div class="create">
     <UserForm
       :fields="formfields"
+      :createUser='handleCreateUser'
       @create="handleCreateUser"
       @add-repeater="handleAddRepeater"
       @del-repeater="handleDelRepeater"

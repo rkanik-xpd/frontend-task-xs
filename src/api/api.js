@@ -1,24 +1,20 @@
 import axios from 'axios'
 
 const api = axios.create({
-    // baseURL: 'http://localhost/vue/simple-crud/api/'
     baseURL: 'http://localhost/vue/frontend-task-xs/api/'
 })
 
-const endpoints = {
+const endp = {
     list: 'list.php',
     reorder: 'reorder.php',
     submit: 'submit_form.php',
-    form: id => {
-        let endpoint = 'get_form.php'
-        return id ? endpoint + `?id=${id}` : endpoint
-    },
+    form: id => id ? `get_form.php?id=${id}` : 'get_form.php',
 }
 
-const handle = async callback => {
-    try { return (await callback).data }
+const handle = async promise => {
+    try { return (await promise).data }
     catch (e) {
-        return e.response ? e.response : {
+        return e.response ? e.response.data : {
             status: 'error',
             messages: [e.message]
         }
@@ -27,48 +23,10 @@ const handle = async callback => {
 
 export default {
 
-    getList: async () => {
-        try { return (await api.get(endpoints.list)).data }
-        catch (error) { return error.response }
-    },
-    reorder: async data => await handle(api.post(endpoints.reorder, data)),
-
-    createUser: data => new Promise(resolve => {
-        api.post(endpoints.submit, data)
-            .then(({ data }) => {
-                if (data.status !== 'error') {
-                    resolve({
-                        messages: data.messages,
-                        data: data.data
-                    })
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                resolve({
-                    error: true,
-                    message: err.message,
-                    data: err.response
-                })
-            })
-    }),
-    getForm: (id) => new Promise(resolve => {
-        api.get(endpoints.form(id))
-            .then(({ data }) => {
-                console.log('getForm', data);
-                if (data.status !== 'error') {
-                    resolve({
-                        form: data.data.fields[0]
-                    })
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                resolve({
-                    error: true,
-                    message: err.message,
-                    data: err.response
-                })
-            })
-    }),
+    getList: async () => await handle(api.get(endp.list)),
+    getForm: async id => await handle(api.get(endp.form(id))),
+    reorder: async data => await handle(api.post(endp.reorder, data)),
+    createUser: async data => await handle(api.post(endp.submit, data)),
+    updateUser: async data => await handle(api.put(endp.submit, data)),
+    
 }
