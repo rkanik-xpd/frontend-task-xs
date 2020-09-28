@@ -5,13 +5,14 @@
 				XpeedStudio User's List
 				<v-spacer></v-spacer>
 				<v-text-field
-					v-model="filterKey"
-					append-icon="mdi-magnify"
-					label="Search user"
 					dense
+					filled
 					single-line
 					hide-details
-					filled
+					label="Search user"
+					append-icon="mdi-magnify"
+					v-if="users.length"
+					v-model="filterKey"
 					@keydown="tableLoading = true"
 					@keyup="tableLoading = false"
 					class="user-list__searchfield rounded-pill"
@@ -24,6 +25,7 @@
 			<v-divider></v-divider>
 			<v-card-text class="px-8">
 				<UsersTable
+					v-if="users.length"
 					:headers="headers"
 					:items="users"
 					:search="filterKey"
@@ -32,6 +34,9 @@
 					@reorder="handleReorder"
 					class="user-list__table"
 				/>
+				<div class="pa-8" v-else>
+					<h3 class="body-1 text-center">No Data Found!</h3>
+				</div>
 			</v-card-text>
 		</v-card>
 	</div>

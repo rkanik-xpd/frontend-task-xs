@@ -1,10 +1,10 @@
 <template>
   <div class="user-form">
-    <v-card class="pa-5" :loading="!fields.length">
-      <v-card-title>{{ update ? "Update" : "Create" }} User</v-card-title>
+    <v-card>
+      <v-card-title class="pt-8">{{ update ? "Update" : "Create" }} User</v-card-title>
       <v-card-subtitle>Please fill up the form corretly</v-card-subtitle>
-      <v-card-text class="mt-10">
-        <v-form v-if="fields.length" ref="form" v-model="valid" lazy-validation>
+      <v-card-text v-if="fields.length" class="mt-10">
+        <v-form ref="form" v-model="valid" lazy-validation>
           <template v-for="(field, fieldIndex) in fields">
             <!-- Start Hidden -->
             <input
@@ -142,6 +142,9 @@
           </v-btn> -->
         </v-form>
       </v-card-text>
+      <v-card-text class="pa-8" v-else>
+        <h3 class="body-1 text-center">Error getting form data</h3>
+      </v-card-text>
     </v-card>
   </div>
 </template>
@@ -162,7 +165,6 @@ export default {
     valid: true,
     loading: false
   }),
-  created() {},
   computed: {
     rRequired: () => v => !!v || "Field is required!",
     rEmail: () => v => /.+@.+\..+/.test(v) || "E-mail must be valid",
