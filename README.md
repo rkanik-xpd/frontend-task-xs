@@ -5,6 +5,8 @@
 yarn install
 ```
 
+### Update API BASE URL at src/api/api.js [line:04]
+
 ### Compiles and hot-reloads for development
 ```
 yarn serve
