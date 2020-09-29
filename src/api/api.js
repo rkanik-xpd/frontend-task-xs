@@ -1,8 +1,11 @@
 import axios from 'axios'
+import { folderName, server } from '../../build.config.json'
 
-const api = axios.create({
-    baseURL: 'http://localhost/vue/frontend-task-xs/api/'
-})
+const baseURL = process.env.NODE_ENV === 'production'
+    ? `${server.baseUrl}${server.folderPath}${folderName}/api/`
+    : `http://localhost/vue/frontend-task-xs/api/`
+
+const api = axios.create({ baseURL })
 
 const endp = {
     list: 'list.php',
@@ -28,5 +31,5 @@ export default {
     reorder: async data => await handle(api.post(endp.reorder, data)),
     createUser: async data => await handle(api.post(endp.submit, data)),
     updateUser: async data => await handle(api.put(endp.submit, data)),
-    
+
 }

@@ -1,0 +1,8 @@
+{
+    "folderName": "frontend-task-rkanik",
+    "folderPath": "../../",
+    "server": {
+        "baseUrl": "http://localhost/",
+        "folderPath": ""
+    }
+}

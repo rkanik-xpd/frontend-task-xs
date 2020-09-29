@@ -60,7 +60,7 @@ export default {
     async handleCreateUser(user) {
       // Submit form and get response
       let { status, messages } = await api.createUser(user);
-      await sleep(1000)
+      await sleep(450)
       if (status === 'error') return this.notify(messages, status)
       // Show notifications
       this.notify(messages, status)
@@ -69,7 +69,7 @@ export default {
     async handleUpdateUser(user) {
       // Submit form and get response
       let { status, messages } = await api.updateUser(user);
-      await sleep(1000)
+      await sleep(450)
       if (status === 'error') return this.notify(messages, status)
       // Show notifications
       this.notify(messages, status)

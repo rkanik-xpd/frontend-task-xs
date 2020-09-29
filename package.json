@@ -2,9 +2,13 @@
   "name": "frontend-task-xs",
   "version": "0.1.0",
   "private": true,
+  "main": "src/index.js",
+  "module": "",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:server": "vue-cli-service build && webpack --hide-modules",
+    "build:webpack": "webpack --hide-modules",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -26,6 +30,7 @@
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
+    "copy-webpack-plugin": "^6.1.1",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "lint-staged": "^9.5.0",
@@ -34,7 +39,8 @@
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-vuetify": "~2.0.7",
     "vue-template-compiler": "^2.6.11",
-    "vuetify-loader": "^1.3.0"
+    "vuetify-loader": "^1.3.0",
+    "webpack-cli": "^3.3.12"
   },
   "eslintConfig": {
     "root": true,

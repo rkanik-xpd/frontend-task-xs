@@ -21,7 +21,7 @@
 						{{ key === "created_at" ? date(columnKeys[key]) : user[key] }}
 					</td>
 					<td>
-						<v-btn :to="`/update/${user.id}`" icon small>
+						<v-btn :to="{ name: 'Update', params: { id: user.id }}" icon small>
 							<v-icon small>mdi-pencil</v-icon>
 						</v-btn>
 					</td>

@@ -2,7 +2,7 @@
 	<v-container>
 		<v-toolbar color="appbar" class="elevation-1 rounded">
 			<div class="d-flex align-center">
-				<router-link to="/">
+				<router-link :to="{ name: 'Home' }">
 					<slot name="logo"></slot>
 				</router-link>
 			</div>

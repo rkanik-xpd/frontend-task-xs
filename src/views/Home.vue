@@ -17,7 +17,7 @@
 					@keyup="tableLoading = false"
 					class="user-list__searchfield rounded-pill"
 				></v-text-field>
-				<v-btn to="/create" color="primary" class="rounded-pill ml-5">
+				<v-btn :to="{ name: 'Create' }" color="primary" class="rounded-pill ml-5">
 					<v-icon left>mdi-plus-circle-outline</v-icon>
 					CREATE
 				</v-btn>
