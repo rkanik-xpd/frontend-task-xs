@@ -28,8 +28,8 @@ export default {
 
     getList: async () => await handle(api.get(endp.list)),
     getForm: async id => await handle(api.get(endp.form(id))),
-    reorder: async data => await handle(api.post(endp.reorder, data)),
-    createUser: async data => await handle(api.post(endp.submit, data)),
-    updateUser: async data => await handle(api.put(endp.submit, data)),
+    reorder: async data => await handle(api.get(endp.reorder, data)),
+    createUser: async data => await handle(api.get(endp.submit, data)),
+    updateUser: async data => await handle(api.get(endp.submit, data)),
 
 }

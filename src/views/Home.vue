@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<v-card class="user-list">
+		<v-card class="user-list" :loading="loading" :disabled="loading">
 			<v-card-title class="pa-8">
 				XpeedStudio User's List
 				<v-spacer></v-spacer>
@@ -17,7 +17,11 @@
 					@keyup="tableLoading = false"
 					class="user-list__searchfield rounded-pill"
 				></v-text-field>
-				<v-btn :to="{ name: 'Create' }" color="primary" class="rounded-pill ml-5">
+				<v-btn
+					:to="{ name: 'Create' }"
+					color="primary"
+					class="rounded-pill ml-5"
+				>
 					<v-icon left>mdi-plus-circle-outline</v-icon>
 					CREATE
 				</v-btn>
@@ -34,8 +38,23 @@
 					@reorder="handleReorder"
 					class="user-list__table"
 				/>
-				<div class="pa-8" v-else>
-					<h3 class="body-1 text-center">No Data Found!</h3>
+				<div class="pa-8">
+					<h3
+						v-if="!users.length && !loading"
+						class="body-1 text-center red--text"
+					>
+						No Data Found!
+					</h3>
+					<div class="text-center" v-if="loading">
+						<v-progress-circular
+							:width="6"
+                            :size="70"
+							color="green"
+							indeterminate
+							class="mb-5"
+						></v-progress-circular>
+						<h3 class="body-1">Fetching Data!</h3>
+					</div>
 				</div>
 			</v-card-text>
 		</v-card>
@@ -68,7 +87,8 @@ export default {
 		],
 		users: [],
 		headerKeys: [],
-		tableLoading: false
+		tableLoading: false,
+		loading: false
 	}),
 	created() {
 		this.getList()
@@ -106,8 +126,9 @@ export default {
 		},
 
 		async getList() {
-
+			this.loading = true
 			let { status, messages, data } = await api.getList()
+			//await sleep(1000)
 
 			if (status === 'error') return this.notify(messages, 'error')
 
@@ -140,6 +161,7 @@ export default {
 
 			// Concat headers between two additional column
 			this.headers.splice(1, 0, ...headers)
+			this.loading = false
 
 		}
 	}

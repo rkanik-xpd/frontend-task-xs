@@ -1,8 +1,8 @@
 {
-    "folderName": "frontend-task-xs-rkanik",
+    "folderName": "frontend-task-xs",
     "folderPath": "../../",
     "server": {
-        "baseUrl": "http://localhost/",
+        "baseUrl": "https://vueprojects.000webhostapp.com/",
         "folderPath": ""
     }
 }

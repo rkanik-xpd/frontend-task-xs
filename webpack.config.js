@@ -6,7 +6,7 @@ const outputDirectory = path.resolve(__dirname, folderPath + folderName)
 module.exports = {
     mode: 'production',
     entry: {
-        'index': './src/index.js'
+        'server': './src/server'
     },
     output: {
         path: outputDirectory,

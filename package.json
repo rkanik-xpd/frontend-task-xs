@@ -2,7 +2,7 @@
   "name": "frontend-task-xs",
   "version": "0.1.0",
   "private": true,
-  "main": "src/index.js",
+  "main": "src/server",
   "module": "",
   "scripts": {
     "serve": "vue-cli-service serve",

@@ -46,7 +46,6 @@ export default {
 			this.changeTheme(!this.$vuetify.theme.dark);
 		},
 		changeTheme(theme) {
-			console.log("changeTheme");
 			this.$vuetify.theme.dark = theme;
 			localStorage.setItem(this.THEME_KEY, theme);
 		},

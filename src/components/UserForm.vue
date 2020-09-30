@@ -1,11 +1,11 @@
 <template>
 	<div class="user-form">
-		<v-card>
+		<v-card :loading="loading" :disabled="loading">
 			<v-card-title class="pt-8"
 				>{{ update ? "Update" : "Create" }} User</v-card-title
 			>
 			<v-card-subtitle>Please fill up the form corretly</v-card-subtitle>
-			<v-card-text v-if="fields.length" class="mt-10">
+			<v-card-text v-if="fields.length && !loading" class="mt-10">
 				<v-form ref="form" v-model="valid" lazy-validation>
 					<template v-for="(field, fieldIndex) in fields">
 						<!-- Start Hidden -->
@@ -135,8 +135,8 @@
 					<v-btn
 						class="mr-4"
 						color="success"
-						:loading="loading"
-						:disabled="!valid || loading"
+						:loading="mLoading"
+						:disabled="!valid || mLoading"
 						@click="handleValidate"
 					>
 						{{ update ? "Update" : "Create" }}
@@ -146,6 +146,17 @@
           </v-btn> -->
 				</v-form>
 			</v-card-text>
+			<c-card-text class="pa-8" v-else-if="loading">
+				<div class="text-center">
+					<v-progress-circular
+						:width="6"
+						:size="70"
+						color="green"
+						indeterminate
+						class="mb-5"
+					></v-progress-circular>
+				</div>
+			</c-card-text>
 			<v-card-text class="pa-8" v-else>
 				<h3 class="body-1 text-center">Error getting form data</h3>
 			</v-card-text>
@@ -164,10 +175,11 @@ export default {
 			default: false,
 		},
 		fields: Array,
+		loading: Boolean
 	},
 	data: () => ({
 		valid: true,
-		loading: false
+		mLoading: false
 	}),
 	computed: {
 		rRequired: () => v => !!v || "Field is required!",
@@ -266,18 +278,18 @@ export default {
 			return ["text", "email", "number"].includes(type);
 		},
 		handleValidate() {
-			this.loading = true
+			this.mLoading = true
 			let valid = this.$refs.form.validate();
 			if (valid) {
 				let data = this.getFieldsAsObject()
 				this.handleSubmit(data).then(success => {
 					(success && !this.update) && this.handleReset()
-					this.loading = false
+					this.mLoading = false
 					this.$router.push({ name: 'Home' })
 				})
 			}
 			else {
-				this.loading = false
+				this.mLoading = false
 			}
 		},
 		handleReset() {
