@@ -2,7 +2,7 @@
     "folderName": "frontend-task-xs",
     "folderPath": "../../",
     "server": {
-        "baseUrl": "https://vueprojects.000webhostapp.com/",
+        "baseUrl": "http://localhost/",
         "folderPath": ""
     }
 }

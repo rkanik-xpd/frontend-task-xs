@@ -38,7 +38,7 @@
 					@reorder="handleReorder"
 					class="user-list__table"
 				/>
-				<div class="pa-8">
+				<div class="pa-8" v-if="(!users.length && !loading) || loading">
 					<h3
 						v-if="!users.length && !loading"
 						class="body-1 text-center red--text"

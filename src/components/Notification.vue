@@ -1,5 +1,5 @@
 <template>
-	<notifications group="toast" position="bottom right">
+	<notifications group="toast" position="bottom right" :duration='1000'>
 		<template slot="body" slot-scope="props">
 			<div class="toast" :class="classes(props.item)" :style="styles">
 				<h3 class="toast__title body-2">{{ props.item.title }}</h3>

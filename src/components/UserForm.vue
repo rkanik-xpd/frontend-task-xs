@@ -146,7 +146,7 @@
           </v-btn> -->
 				</v-form>
 			</v-card-text>
-			<c-card-text class="pa-8" v-else-if="loading">
+			<v-card-text class="pa-8" v-else-if="loading">
 				<div class="text-center">
 					<v-progress-circular
 						:width="6"
@@ -156,7 +156,7 @@
 						class="mb-5"
 					></v-progress-circular>
 				</div>
-			</c-card-text>
+			</v-card-text>
 			<v-card-text class="pa-8" v-else>
 				<h3 class="body-1 text-center">Error getting form data</h3>
 			</v-card-text>
@@ -179,14 +179,18 @@ export default {
 	},
 	data: () => ({
 		valid: true,
-		mLoading: false
+		mLoading: false,
+        banglaChars: 'ঀঁংঃঅআইঈউঊঋঌএঐওঔকখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহ়ঽািীুূৃৄেৈোৌ্ৎৗড়ঢ়য়ৠৡৢৣৰৱ৲৳৴৵৶৷৸৹৺৻ৼ৽৾',
+        banglaNumbers: '০১২৩৪৫৬৭৮৯'
 	}),
 	computed: {
 		rRequired: () => v => !!v || "Field is required!",
-		rEmail: () => v => /.+@.+\..+/.test(v) || "E-mail must be valid",
-		rOnlyLetters: () => v => /^[a-z\s]+$/i.test(v) || "This field only accept characters",
-		rOnlyLetterNumber: () => v => /^[a-z0-9\s]+$/i.test(v) || "This field only accept characters and numbers",
-		maxRegex: () => /max:[0-9]+/,
+		rEmail: () => v => /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+.)+[^<>()[\].,;:\s@"]{2,})$/i.test(v) || "E-mail must be valid",
+		/* eslint-disable */
+		rOnlyLetters() { return v => new RegExp(`[a-z\s${this.banglaChars}]`, 'i').test(v) || "This field only accept characters" },
+		rOnlyLetterNumber(){ return v =>  new RegExp(`[a-z0-9${this.banglaChars}${this.banglaNumbers}]`, 'i').test(v) || "This field only accept characters and numbers" },
+        /* eslint-enable */
+        maxRegex: () => /max:[0-9]+/,
 		handleSubmit() { return this.update ? this.updateUser : this.createUser }
 	},
 	methods: {
